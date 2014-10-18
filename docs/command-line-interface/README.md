@@ -26,7 +26,6 @@ Options:
   -c, --config path::String   Load configuration data from this file.
   --rulesdir [path::String]   Load additional rules from this directory.
   -f, --format String         Use a specific output format. - default: stylish
-  -o, --output-file           Outputs the output into a file.
   -v, --version               Outputs the version number.
   --reset                     Set all default rules to off.
   --eslintrc                  Enable loading .eslintrc configuration. -
@@ -38,6 +37,9 @@ Options:
   --ignore-path path::String  Specify the file that contains patterns of files
                               to ignore.
   --ignore                    Enable loading of .eslintignore. - default: true
+  --color                     Enable color in piped output. - default: true
+  -o, --output-file path::String  Enable report to be written to a file.
+  --stdin                     Lint code provided on <STDIN>. - default: false
 ```
 
 ### `-h`, `--help`
@@ -114,7 +116,7 @@ Example
 
     eslint --env browser,node file.js
     eslint --env browser --env node file.js
-    
+
 ### `--plugin`
 
 This option specifies a plugin to load. You can omit the prefix `eslint-plugin-` from the plugin name.
@@ -161,6 +163,14 @@ Example:
 
   eslint --ignore false file.js
   eslint --no-ignore file.js
+
+### `--stdin`
+
+This option tells ESLint to read and lint source code from STDIN instead files. You can use this to pipe code to ESLint, such as:
+
+```
+cat myfile.js | eslint --stdin
+```
 
 ### `-v`, `--version`
 
