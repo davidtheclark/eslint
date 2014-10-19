@@ -2036,7 +2036,7 @@ describe("eslint", function() {
     });
 
     describe("when evaluating a file with a shebang", function() {
-        var code = "#!bin/program\n\n;";
+        var code = "#!bin/program\n\nvar foo;;";
 
         it("should preserve line numbers", function() {
             var config = { rules: { "no-extra-semi": 1 } };
@@ -2047,6 +2047,24 @@ describe("eslint", function() {
             assert.equal(messages[0].node.type, "EmptyStatement");
             assert.equal(messages[0].line, 3);
             assert.equal(messages[0].line, messages[0].node.loc.start.line);
+        });
+
+        it("should not have a comment with the shebang in it", function() {
+            var config = { rules: { "no-extra-semi": 1 } };
+            eslint.reset();
+
+            eslint.on("Program", function(node) {
+                assert.equal(node.comments.length, 0);
+
+                var comments = eslint.getComments(node);
+                assert.equal(comments.leading.length, 0);
+                assert.equal(comments.trailing.length, 0);
+
+                comments = eslint.getComments(node.body[0]);
+                assert.equal(comments.leading.length, 0);
+                assert.equal(comments.trailing.length, 0);
+            });
+            eslint.verify(code, config, "foo.js", true);
         });
     });
 
